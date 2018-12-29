@@ -1,0 +1,35 @@
+Ryan Wood
+Student ID: 102236570
+
+Run make to compile, and make clean to remove any files generated during the course of building and/or running your program.
+
+You must have queue.c as well as queue.h in order to compile
+
+Run using ./multi-lookup <#req> <#res> <requester file> <resolver file> <inputfile1> <inputfile2> <inputfile3>...etc
+Note: For my program, each input file is its own argument.  The input files are not put into a comma separated list and passed to the program as one argument.
+The max requester threads is 10, max resolver threads is 5, bogus resolver or requester files will result in program termination, and bogus input file names will be ignored.
+
+In order to generate the 3d graph run:
+python3 performance.py multi-lookup
+(you can run it in the background or send it to dev/null if you'd like)
+Note: I had to change a couple lines of performance.py in order to make it run with how my program passes in the input files.  As discussed above, my program takes each input as its own command line argument, while performance.py expects the inputs to be passed in as a list.  I changed the following line in performance.py:
+
+# Declare parameters and the call arguments for the subprocess.call
+            input_dir = "./input/"
+            name_files = "%snames1.txt, %snames2.txt, %snames3.txt, %snames4.txt, %snames5.txt" % (input_dir, input_dir, input_dir, input_dir, input_dir)
+            parameters = "%s %s" % (req, res)
+            call_arguments = str("""["%s", "%s", "%s", "results.txt", "serviced.txt", "%s"]""" % ("./"+str(exe), req, res, name_files))
+
+to the following:
+
+input_dir = "./input/"
+            name_file1 = "%snames1.txt" % (input_dir)
+            name_file2 = "%snames2.txt" % (input_dir)
+            name_file3 = "%snames3.txt" % (input_dir)
+            name_file4 = "%snames4.txt" % (input_dir)
+            name_file5 = "%snames5.txt" % (input_dir)
+            parameters = "%s %s" % (req, res)
+            call_arguments = str("""["%s", "%s", "%s", "results.txt", "serviced.txt", "%s","%s","%s","%s","%s"]""" % ("./"+str(exe), req, res, name_file1,name_file2,name_file3,name_file4,name_file5))
+
+I've included queue.c and queue.h in my submission.
+I have also included figure1.png and performance.py.  Figure1 shows the graph I created, and performance.py is my modified performance program.

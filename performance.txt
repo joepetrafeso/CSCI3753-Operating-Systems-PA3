@@ -1,0 +1,48 @@
+Number for requester thread = 1
+Number for resolver thread = 1
+Total run time: 12076 ms
+Thread 67910 serviced 5 files.
+
+Number for requester thread = 1
+Number for resolver thread = 3
+Total run time: 3848 ms
+Thread 67926 serviced 5 files.
+
+Number for requester thread = 3
+Number for resolver thread = 1
+Total run time: 9999 ms
+Thread 67962 serviced 2 files.
+Thread 67963 serviced 2 files.
+Thread 67964 serviced 3 files.
+
+Number for requester thread = 3
+Number for resolver thread = 3
+Total run time: 2687 ms
+Thread 67990 serviced 2 files.
+Thread 67988 serviced 3 files.
+Thread 67989 serviced 2 files.
+
+Number for requester thread = 5
+Number for resolver thread = 5
+Total run time: 1788 ms
+Thread 68010 serviced 3 files.
+Thread 68006 serviced 2 files.
+Thread 68007 serviced 1 files.
+Thread 68009 serviced 1 files.
+Thread 68008 serviced 2 files.
+
+Number for requester thread = 8
+Number for resolver thread = 5
+Total run time: 1573 ms
+Thread 67910 serviced 5 files.
+Thread 68061 serviced 1 files.
+Thread 68055 serviced 2 files.
+Thread 68056 serviced 2 files.
+Thread 68058 serviced 2 files.
+Thread 68057 serviced 1 files.
+Thread 68060 serviced 2 files.
+Thread 68054 serviced 2 files.
+Thread 68059 serviced 1 files.
+
+	As can be seen by the above tests, multi-lookup.c is utilizing multi-threading correctly.  As a general rule, as the amount of resolver threads increase, the run time of the program decreases, and as the amount of requester threads increase, the run time also decreases.  This is because the cores of the computer are able to utilize these multiple threads in order to read from and write to files and the shared buffer much quicker.  It is also important to notice that it would appear that the amount of resolver threads has a more drastic affect on program run time than the amount of requester threads.  This can be seen in the graph as well.  My program can only take in at most 5 requester threads, and the difference in run time going from 1 resolver thread to 5 is more substantial than going from 1 requester thread to 10.  For instance, if you take the test case of 5 requesters and 5 resolvers, and compare it to the test case with 8 requesters and 5 resolvers, while the run time does decrease, it only decreases by .2 seconds.  However, when you compare 1 resolver and 1 requester thread to 1 requester and 3 resolver threads, the run time decreases by over 8 seconds.  Clearly, the resolver threads increase program speeds moreso than resolver threads.  This is most likely due to the fact that it takes more time to do the dns lookup than it does to read from a file and save the data to a shared buffer.
+	One interesting thing I noticed when looking at the generated graph is that at 1 resolver thread, there was actually an increase in runtime after around 6 requester threads.  It must be noted that due to CPU scheduling, if the performance.py was run again, there is a chance we would not see this trend at all, but it does suggest, that there is limit to the amount of requester threads you can use that will actually improve program speeds.  For instance, implementing 100 threads will not show drastic improvements in runtime over implementing 10 requester threads.  Overall, the above tests, and the graph both agree, and affirm the fact that multithreading, when used correctly, can drastically speed up programs.
